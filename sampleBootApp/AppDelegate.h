@@ -8,10 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
+#define APP_DELEGATE ((AppDelegate*)[[UIApplication sharedApplication] delegate])
+
+/* initBoot Status */
+typedef enum {
+    kLoaded,                // Ordinary boot
+    kLoadedPrevios,         // migration
+    kLoadeFirst             // entirely new
+} loadInitType;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) NSUserDefaults *userDefaults;
+@property (assign) loadInitType   isLoadedStatus;
+@property (strong, nonatomic) NSString *aplName;
+@property (strong, nonatomic) NSString *aplVersionNo;
+@property (strong, nonatomic) NSString *aplBuildNo;
 
-
+- (BOOL)checkInitialMessage;
+- (void)setInitialMessage:(BOOL)settting;
 @end
 

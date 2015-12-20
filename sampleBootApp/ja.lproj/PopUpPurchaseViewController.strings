@@ -1,0 +1,15 @@
+/* Class = "UILabel"; text = "status"; ObjectID = "3jS-vo-hK3"; */
+"3jS-vo-hK3.text" = "状態";
+
+/* Class = "UIButton"; normalTitle = "restore"; ObjectID = "GvT-hP-zRI"; */
+"GvT-hP-zRI.normalTitle" = "リストア";
+
+/* Class = "UIButton"; normalTitle = "purchase"; ObjectID = "YtD-tr-DQS"; */
+"YtD-tr-DQS.normalTitle" = "購入";
+
+/* Class = "UILabel"; text = "In-App Purchase"; ObjectID = "ctQ-4v-nJU"; */
+"ctQ-4v-nJU.text" = "アプリ内購入";
+
+/* Class = "UILabel"; text = "name"; ObjectID = "zsa-ZJ-iBB"; */
+"zsa-ZJ-iBB.text" = "名称";
+

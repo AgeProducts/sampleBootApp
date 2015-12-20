@@ -1,0 +1,42 @@
+//
+//  sampleBootApp.pch
+//  sampleBootApp
+//
+//  Created by 堀 卓司 on 2015/12/28.
+//  Copyright © 2015年 Age Products. All rights reserved.
+//
+
+#import "AppDelegate.h"
+
+#ifndef sampleBootApp_pch
+#define sampleBootApp_pch
+#endif /* sampleBootApp_pch */
+
+/* #define AD_TEST_TIMER */
+
+// Apple ID
+#define _MyApp_APPLE_ID      @"9999999999"
+#define APP_ID  _MyApp_APPLE_ID
+
+// mail add
+#define AUTHOR_MAILADDER    @"My_Contact_MailAddress@iCloud.com"
+
+#define PERCHASE_ID             @"com.myCompany.myPerchaseID"   // set your in-App perchase ID
+#define DEFAULT_PurchaseString  @"NO_Purchase"
+
+// AdMob MEDIATION ID
+#define MY_MEDIATION_ID         @"ca-app-pub-999999999999999999999999999"   // set your Admob MEDIATION ID
+
+// Description of the video url. Example youtube.
+// #define MY_VIDEO_URL         @"https://www.youtube.com/zzzzzzzzzzz"     // set your VIDEO url
+#define MY_VIDEO_URL            @"https://www.youtube.com/watch?v=BS4SmOSihNc"
+
+/* Setup defaults & UD Keys */
+#define UD_LOADED_ONCE          @"UD_LOADED_ONCEv1.0"               // Upcoming version
+#define UD_LOADED_ONCE_PREVIOS  @"UD_LOADED_ONCEvNON"               // Existing version
+
+
+
+
+
+

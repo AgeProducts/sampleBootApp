@@ -1,0 +1,27 @@
+
+/* Class = "UITabBarItem"; title = "Setup"; ObjectID = "DJF-sv-kxN"; */
+"DJF-sv-kxN.title" = "Setting";
+
+/* Class = "UILabel"; text = "Show init message"; ObjectID = "HpQ-Bj-63P"; */
+"HpQ-Bj-63P.text" = "初期メッセージ表示";
+
+/* Class = "UIButton"; normalTitle = "Mail"; ObjectID = "MR2-5z-NOX"; */
+"MR2-5z-NOX.normalTitle" = "メール";
+
+/* Class = "UIButton"; normalTitle = "Review"; ObjectID = "apU-pw-YKO"; */
+"apU-pw-YKO.normalTitle" = "レビュー";
+
+/* Class = "UIButton"; normalTitle = "How to Use"; ObjectID = "lRQ-oF-5xl"; */
+"lRQ-oF-5xl.normalTitle" = "使用法";
+
+/* Class = "UIButton"; normalTitle = "Purchase"; ObjectID = "oOl-Bf-Km4"; */
+"oOl-Bf-Km4.normalTitle" = "アプリ内購入";
+
+/* Class = "UINavigationItem"; title = "How to use"; ObjectID = "pcn-9W-fSG"; */
+"pcn-9W-fSG.title" = "使用法";
+
+/* Class = "UITabBarItem"; title = "Table"; ObjectID = "t5l-c4-2mb"; */
+"t5l-c4-2mb.title" = "Root";
+
+/* Class = "UINavigationItem"; title = "Root View Controller"; ObjectID = "wdg-MV-gKb"; */
+"wdg-MV-gKb.title" = "Root View";
