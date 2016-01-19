@@ -24,8 +24,8 @@
 #define PERCHASE_ID             @"com.myCompany.myPerchaseID"   // set your in-App perchase ID
 #define DEFAULT_PurchaseString  @"NO_Purchase"
 
-// AdMob MEDIATION ID
-#define MY_MEDIATION_ID         @"ca-app-pub-999999999999999999999999999"   // set your Admob MEDIATION ID
+// AdMob AD Unit ID
+#define MY_AD_UNIT_ID           @"ca-app-pub-999999999999999999999999999"   // set your Admob Ad Unit ID
 
 // Description of the video url. Example youtube.
 // #define MY_VIDEO_URL         @"https://www.youtube.com/zzzzzzzzzzz"     // set your VIDEO url

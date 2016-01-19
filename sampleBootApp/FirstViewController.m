@@ -62,7 +62,7 @@ static NSString * const CellIdentifier = @"Cell";
       bannerWidth = kGADAdSizeBanner.size.width;
       bannerRect = CGRectMake((tableRect.size.width-bannerWidth)/2, tableRect.size.height-tabbarHeight, bannerWidth, bannerHeight);
       self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner origin:CGPointMake(bannerRect.origin.x, bannerRect.origin.y)];
-      self.bannerView.adUnitID = MY_MEDIATION_ID;
+      self.bannerView.adUnitID = MY_AD_UNIT_ID;
       self.bannerView.rootViewController = self;
       self.bannerView.delegate = self;
       [self.view addSubview:self.bannerView];

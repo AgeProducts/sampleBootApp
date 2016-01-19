@@ -16,9 +16,9 @@ Examples of typical iApp additional functions (in-App purchases, advertising, ho
  * _MyApp_APPLE_ID to your (App) Apple ID.
  * AUTHOR_MAILADDER to your contact mail address.
  * PERCHASE_ID to the product ID of the in-App purchase.
- * MY_MEDIATION_ID to admob ID.
+ * MY_AD_UNIT_ID to admob Ad Unit ID.
  * MY_VIDEO_URL to the URL of your YouTube videos.
- * If you wish to simulation of AD display, please delete the comments out of AD_TEST_TIMER.
+ * If you wish to simulation of Ad display, please delete the comments out of AD_TEST_TIMER.
 3. UD_LOADED_ONCE and UD_LOADED_ONCE_PREVIOS.
  * UD_LOADED_ONCE, we will put the version name of the release of this time. UD_LOADED_ONCE_PREVIOS puts the version name that is currently in circulation. String entering every release I will in turn shift.
 4. Change Info.plist
