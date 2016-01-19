@@ -5,26 +5,37 @@
 //  Created by 堀 卓司 on 2015/12/20.
 //  Copyright © 2015年 Age Products. All rights reserved.
 //
-
+/*
+ 横起動時に不正？シミュレータのみ！
+ ただ、横対応がおかしい。
+ */
 #import "FirstViewController.h"
 #import "HowToUseViewController.h"
 #import "purchase.h"
+// #import "CustomCell2.h"
+
 @import GoogleMobileAds;
 
-@interface FirstViewController () <GADBannerViewDelegate>
+@interface FirstViewController () <GADBannerViewDelegate, UITableViewDelegate>
 {
    BOOL    bannerIsVisible;
    float   bannerHeight;
    float   bannerWidth;
    CGRect  bannerRect;
+   
    CGRect  tableRect;
+   CGRect  portraitRect;
+   CGRect  landscapeRect;
    
    CGFloat tabbarHeight;
+   CGFloat toolbarHeight;
    NSTimer *timer_;
+   
+   CGFloat framewidth;
 }
 @property UITableView    *xTableView;
 @property NSMutableArray *dataSource;
-@property GADBannerView *bannerView;
+@property GADBannerView  *bannerView;
 @end
 
 @implementation FirstViewController
@@ -39,29 +50,54 @@ static NSString * const CellIdentifier = @"Cell";
    
    UIView *view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
    view.backgroundColor = [UIColor darkGrayColor];
+   tableRect = view.frame;
    
-   self.xTableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
-   self.xTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+   CGRect rotatedFrame = tableRect;
+   landscapeRect = rotatedFrame;
+   landscapeRect.size.width = rotatedFrame.size.height;
+   landscapeRect.size.height = rotatedFrame.size.width;
+   
+   self.xTableView = [[UITableView alloc] initWithFrame:tableRect style:UITableViewStylePlain];
+   
+   //self.xTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+   
    self.xTableView.dataSource = self;
    self.xTableView.delegate = self;
    [view addSubview:self.xTableView];
    self.view = view;
+   self.view.backgroundColor = [UIColor whiteColor];
+   
    [self.xTableView registerNib:[UINib nibWithNibName:TableViewCustomCellIdentifier bundle:nil] forCellReuseIdentifier:CellIdentifier];
+   self.xTableView.backgroundColor = [UIColor whiteColor];
    
-   
+   // ad banner
+   NSLog(@"> Google Mobile Ads SDK version: %@", [GADRequest sdkVersion]);
+
+#ifdef IS_TAB_BAR
+   self.tabBarController.tabBar.hidden = NO;
+   tabbarHeight =  self.navigationController.tabBarController.tabBar.frame.size.height;
+#else
+   self.tabBarController.tabBar.hidden = YES;
+   tabbarHeight =  0;
+#endif
+#ifdef IS_TOOL_BAR
+   self.navigationController.toolbarHidden = NO;
+   toolbarHeight =  self.navigationController.toolbar.frame.size.height;
+#else
+   self.navigationController.toolbarHidden = YES;
+   toolbarHeight =  0;
+#endif
+
+   self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
+   bannerHeight = self.bannerView.frame.size.height;
+   bannerWidth = self.bannerView.frame.size.width;
+   bannerRect = CGRectMake((tableRect.size.width-bannerWidth)/2, tableRect.size.height-tabbarHeight-toolbarHeight, bannerWidth, bannerHeight);
+      
+   portraitRect = CGRectMake(tableRect.origin.x, tableRect.origin.y, tableRect.size.width, tableRect.size.height-tabbarHeight-toolbarHeight);
+      
    NSString *purchaseString = [[purchase sharedInstance] checkPurchaseItem];
    if (purchaseString==nil || [purchaseString isEqualToString:DEFAULT_PurchaseString])
    {
-      // ad banner
-      NSLog(@"> Google Mobile Ads SDK version: %@", [GADRequest sdkVersion]);
-      
-      tabbarHeight =  self.navigationController.tabBarController.tabBar.frame.size.height;
-      tableRect = [[UIScreen mainScreen] bounds];
-      
-      bannerHeight = kGADAdSizeBanner.size.height;
-      bannerWidth = kGADAdSizeBanner.size.width;
-      bannerRect = CGRectMake((tableRect.size.width-bannerWidth)/2, tableRect.size.height-tabbarHeight, bannerWidth, bannerHeight);
-      self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner origin:CGPointMake(bannerRect.origin.x, bannerRect.origin.y)];
       self.bannerView.adUnitID = MY_AD_UNIT_ID;
       self.bannerView.rootViewController = self;
       self.bannerView.delegate = self;
@@ -69,17 +105,17 @@ static NSString * const CellIdentifier = @"Cell";
       
       [self.bannerView loadRequest:[GADRequest request]];
       bannerIsVisible = NO;
-      
    }
    [self initStart];
    [self makeTable];
 }
 
+
 #ifdef AD_TEST_TIMER
 - (void)startAdDebugTimer
 {
    if (![timer_ isValid]) {
-      timer_ = [NSTimer scheduledTimerWithTimeInterval:3.0
+      timer_ = [NSTimer scheduledTimerWithTimeInterval:AD_TIMER_INTERVAL
                                                 target:self
                                               selector:@selector(adViewTest)
                                               userInfo:nil
@@ -133,11 +169,99 @@ static NSString * const CellIdentifier = @"Cell";
 
 - (void)viewWillDisappear:(BOOL)animated {
    [super viewWillDisappear:animated];
+   [self adView:nil didFailToReceiveAdWithError:nil];
    self.bannerView.delegate = nil;
 #ifdef AD_TEST_TIMER
    [self stopAdDebugTimer];
 #endif
 }
+
+/*- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+{
+   // dummy
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+   /////////// return;
+   
+   if ([self orientationPortrait]) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+         NSString *purchaseString = [[purchase sharedInstance] checkPurchaseItem];
+         if (purchaseString!=nil && [purchaseString isEqualToString:DEFAULT_PurchaseString]==NO && self.bannerView!=nil)
+         {
+            [self adView:nil didFailToReceiveAdWithError:nil];
+            self.bannerView.delegate = nil;
+         } else {
+            self.bannerView.delegate = self;
+#ifdef AD_TEST_TIMER
+            [self startAdDebugTimer];
+#endif
+         }
+      });
+   } else {
+         [self adView:nil didFailToReceiveAdWithError:nil];
+         self.bannerView.delegate = nil;
+#ifdef AD_TEST_TIMER
+         [self stopAdDebugTimer];
+#endif
+   }
+   [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}*/
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+   if ([self orientationPortrait]) {
+      NSString *purchaseString = [[purchase sharedInstance] checkPurchaseItem];
+      if (purchaseString!=nil && [purchaseString isEqualToString:DEFAULT_PurchaseString]==NO && self.bannerView!=nil)
+      {
+         [self adView:nil didFailToReceiveAdWithError:nil];
+         self.bannerView.delegate = nil;
+      } else {
+         self.bannerView.delegate = self;
+#ifdef AD_TEST_TIMER
+         [self startAdDebugTimer];
+#endif
+      }
+   } else {
+      [self adView:nil didFailToReceiveAdWithError:nil];
+      self.bannerView.delegate = nil;
+#ifdef AD_TEST_TIMER
+      [self stopAdDebugTimer];
+#endif
+   }
+   [self.xTableView reloadData];
+}
+
+-(void)viewDidLayoutSubviews
+{
+   [super viewDidLayoutSubviews];
+   
+   if ([self orientationPortrait])
+   {
+      // iOS 8 layout bug! Table's "height" taken from "width" after changing frame. But then if we cancel transform, set width/height to the final width/height, and rotate it and set to the virtual width/height - it works!
+       self.xTableView.frame = portraitRect;
+    } else {
+      self.xTableView.frame = landscapeRect;
+   }
+   
+   [self.view layoutIfNeeded];
+}
+
+- (BOOL)orientationPortrait
+{
+   BOOL portrait = NO;
+   UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+   switch (orientation) {
+      case UIInterfaceOrientationPortrait:
+         portrait = YES;
+         break;
+      default:
+         break;
+   }
+   return portrait;
+}
+
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)bannerView
 {
@@ -156,9 +280,14 @@ static NSString * const CellIdentifier = @"Cell";
       bannerIsVisible = YES;
       [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
       [UIView setAnimationDuration:0.3];
-      self.xTableView.frame = CGRectMake(tableRect.origin.x, tableRect.origin.y, tableRect.size.width, tableRect.size.height-bannerHeight);
-      self.bannerView.alpha = 1.0f;
-      self.bannerView.frame = CGRectMake(bannerRect.origin.x, bannerRect.origin.y-bannerHeight, bannerWidth, bannerHeight);
+      if ([self orientationPortrait]) {
+         self.xTableView.frame = CGRectMake(tableRect.origin.x, tableRect.origin.y, tableRect.size.width, tableRect.size.height-bannerHeight);
+         self.bannerView.alpha = 1.0f;
+         self.bannerView.frame = CGRectMake(bannerRect.origin.x, bannerRect.origin.y-bannerHeight, bannerWidth, bannerHeight);
+      } else {
+         self.bannerView.alpha = 0.0f;
+         self.xTableView.frame = landscapeRect;
+      }
       [UIView commitAnimations];
    }
 }
@@ -170,9 +299,14 @@ static NSString * const CellIdentifier = @"Cell";
       bannerIsVisible = NO;
       [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
       [UIView setAnimationDuration:0.3];
-      self.xTableView.frame = tableRect;
-      self.bannerView.alpha = 0.0f;
-      self.bannerView.frame = bannerRect;
+      if ([self orientationPortrait]) {
+         self.xTableView.frame = tableRect;
+         self.bannerView.alpha = 0.0f;
+         self.bannerView.frame = bannerRect;
+      } else {
+         self.bannerView.alpha = 0.0f;
+         self.xTableView.frame = landscapeRect;
+      }
       [UIView commitAnimations];
    }
 }
@@ -185,11 +319,13 @@ static NSString * const CellIdentifier = @"Cell";
     return self.dataSource.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    cell.textLabel.text = self.dataSource[indexPath.row];
-    return cell;
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+   
+   UITableViewCell *cell = [self.xTableView dequeueReusableCellWithIdentifier:CellIdentifier];
+   cell.textLabel.text = self.dataSource[indexPath.row];
+   return cell;
+   
 }
 
 - (void)makeTable
@@ -233,6 +369,8 @@ static NSString * const CellIdentifier = @"Cell";
          [self presentViewController:alertController animated:YES completion:nil];
       }
    });
+
+   APP_DELEGATE.isEnableRotation = YES;
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -244,6 +382,17 @@ static NSString * const CellIdentifier = @"Cell";
       howToUseViewController.hidesBottomBarWhenPushed = YES;
       howToUseViewController.segueID = segueID;
    }
+   /*if ([[segue identifier] isEqualToString:@"showDetail"]) {
+      NSIndexPath *indexPath = [self.xTableView indexPathForSelectedRow];
+      DetailTableViewController *controller = (DetailTableViewController *)[[segue destinationViewController] topViewController];
+      controller.segue = [segue identifier];
+   }*/
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+   // [self performSegueWithIdentifier:@"showDetail" sender:self];
+   // [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

@@ -19,7 +19,6 @@
     // Override point for customization after application launch.
     
     [self initSettings];
-
     return YES;
 }
 
@@ -40,6 +39,7 @@
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     
     /* If necessary, the foreground transition notification */
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -51,6 +51,15 @@
 
     /* If necessary, the Terminate notification */
     [self saveDefault];
+}
+
+-(UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
+    if (self.isEnableRotation) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    } else {
+        return UIInterfaceOrientationMaskPortrait;
+    }
 }
 
 - (void)initSettings
@@ -112,6 +121,7 @@
     self.aplName = [[[NSBundle mainBundle] localizedInfoDictionary]  objectForKey:@"CFBundleDisplayName"];
     self.aplVersionNo = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     self.aplBuildNo = [[[NSBundle mainBundle] infoDictionary]   objectForKey:@"CFBundleVersion"];
+    self.isEnableRotation = NO;
 }
 
 - (void)saveDefault

@@ -24,6 +24,7 @@ typedef enum {
 @property (strong, nonatomic) NSString *aplName;
 @property (strong, nonatomic) NSString *aplVersionNo;
 @property (strong, nonatomic) NSString *aplBuildNo;
+@property bool                isEnableRotation;
 
 - (BOOL)checkInitialMessage;
 - (void)setInitialMessage:(BOOL)settting;

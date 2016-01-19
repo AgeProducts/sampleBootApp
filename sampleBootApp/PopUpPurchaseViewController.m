@@ -227,8 +227,6 @@
 
 - (IBAction)restoreAct:(id)sender
 {
-   //  NSLog(@"restoreAct");
-    
     [self buttonState:NO];
 
     if (![self canAccessNetwork]) {
@@ -289,15 +287,13 @@
 
 -(void) successfulPurchase:(EBPurchase*)ebp restored:(bool)isRestore identifier:(NSString*)productId receipt:(NSData*)transactionReceipt
 {
-    NSLog(@"ViewController successfulPurchase. %@ %@",isRestore?@"restore":@"purchase",productId);
+    // NSLog(@"ViewController successfulPurchase. %@ %@",isRestore?@"restore":@"purchase",productId);
     {
-        NSLog(@"completeUpgradePlus");
         if ([productId isEqualToString:PERCHASE_ID]==NO)
         {
             NSLog(@"error perchase ID:%@",productId);
             return;
         }
-        NSLog(@"productId:%@",productId);
         
         [[purchase sharedInstance]    setPurchaseItem];
         restoreMyself = YES;
@@ -389,7 +385,7 @@
 
 -(void) paymentQueueRemovedTransactions
 {
-    NSLog(@"paymentQueueRemovedTransactions >> Complete");
+    // NSLog(@"paymentQueueRemovedTransactions >> Complete");
     [SVProgressHUD dismiss];    
 }
 
