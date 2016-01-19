@@ -28,7 +28,9 @@ Examples of typical iApp additional functions (in-App purchases, advertising, ho
 
 ## Known issues and Limitations
 * Only supports portrait and iPhone. Others have not been tested.
+* Therefore, only the standard banner (320x50) is target.
 * Mail and iTunes reviews, do not work in the simulator.
+* "Settings -> Restrictions -> in-App Purchases" decision of  might not work (PopUpPurchaseViewController). Actual harm is not, but the message is strange.
 
 ## License
 Distributed under the MIT License.
