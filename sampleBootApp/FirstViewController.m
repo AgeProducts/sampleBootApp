@@ -5,10 +5,7 @@
 //  Created by 堀 卓司 on 2015/12/20.
 //  Copyright © 2015年 Age Products. All rights reserved.
 //
-/*
- 横起動時に不正？シミュレータのみ！
- ただ、横対応がおかしい。
- */
+
 #import "FirstViewController.h"
 #import "HowToUseViewController.h"
 #import "purchase.h"
@@ -182,9 +179,7 @@ static NSString * const CellIdentifier = @"Cell";
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
-{
-   /////////// return;
-   
+{   
    if ([self orientationPortrait]) {
       dispatch_async(dispatch_get_main_queue(), ^{
          NSString *purchaseString = [[purchase sharedInstance] checkPurchaseItem];
@@ -239,8 +234,7 @@ static NSString * const CellIdentifier = @"Cell";
    
    if ([self orientationPortrait])
    {
-      // iOS 8 layout bug! Table's "height" taken from "width" after changing frame. But then if we cancel transform, set width/height to the final width/height, and rotate it and set to the virtual width/height - it works!
-       self.xTableView.frame = portraitRect;
+      self.xTableView.frame = portraitRect;
     } else {
       self.xTableView.frame = landscapeRect;
    }
