@@ -31,7 +31,7 @@
 
 // AdMob AD Unit ID
 // #define MY_AD_UNIT_ID        @"ca-app-pub-999999999999999999999999999"   // set your Ad Unit ID
-#define MY_AD_UNIT_ID           @"ca-app-pub-3940256099942544/2934735716"   // Google sample AD_UNIT_ID
+#define MY_AD_UNIT_ID           @"ca-app-pub-3940256099942544/2934735716"   // Google Sample AD_UNIT_ID
 
 
 // Description of the video url. Example youtube.
